@@ -8,6 +8,8 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    outputs:
+      image-tag: ${{ steps.vars.outputs.TAG }}
     steps:
       - uses: actions/checkout@v4
 
@@ -49,11 +51,11 @@ jobs:
 
       - name: Update image in manifest
         run: |
-          pwd
-          ls
+          TAG=${{ needs.docker.outputs.image-tag }}
+          echo "Using tag: $TAG"
+          sed -i "s|***/frontend:latest|${{ secrets.DOCKERHUB_USERNAME }}/frontend:${TAG}|" k8s/frontend/frontend.yaml
           cat k8s/frontend/frontend.yaml
-          sed -i "s|01720588884/frontend:latest|${{ secrets.DOCKERHUB_USERNAME }}/frontend:${{ steps.vars.outputs.TAG }}|" k8s/frontend/frontend.yaml
-          cat k8s/frontend/frontend.yaml
+
 #      - name: Apply manifest
 #        run: |
 #          export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
