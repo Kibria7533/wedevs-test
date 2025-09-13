@@ -49,10 +49,11 @@ jobs:
 
       - name: Update image in manifest
         run: |
-          sed -i "s|01720588884/frontend:latest|${{ secrets.DOCKERHUB_USERNAME }}/frontend:${{ steps.vars.outputs.TAG }}|" k8s/frontend/frontend.yaml
-
-      - name: Apply manifest
-        run: |
-          export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
           cat k8s/frontend/frontend.yaml
-          kubectl apply -f k8s/frontend/frontend.yaml -n default
+          sed -i "s|01720588884/frontend:latest|${{ secrets.DOCKERHUB_USERNAME }}/frontend:${{ steps.vars.outputs.TAG }}|" k8s/frontend/frontend.yaml
+          cat k8s/frontend/frontend.yaml
+#      - name: Apply manifest
+#        run: |
+#          export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+#          cat k8s/frontend/frontend.yaml
+#          kubectl apply -f k8s/frontend/frontend.yaml -n default
