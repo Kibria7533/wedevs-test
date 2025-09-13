@@ -49,15 +49,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Update image in manifest
+      - name: Update frontend image in manifest
         run: |
           TAG=${{ needs.docker.outputs.image-tag }}
           echo "Using tag: $TAG"
           sed -i "s|\(image:\s*\).*/frontend:latest|\1${{ secrets.DOCKERHUB_USERNAME }}/frontend:${TAG}|" k8s/frontend/frontend.yaml
           cat k8s/frontend/frontend.yaml
 
+      - name: Update Backend image in manifest
+        run: |
+          TAG=${{ needs.docker.outputs.image-tag }}
+          echo "Using tag: $TAG"
+          sed -i "s|\(image:\s*\).*/backend:latest|\1${{ secrets.DOCKERHUB_USERNAME }}/backend:${TAG}|" k8s/backend/backend.yaml
+          cat k8s/backend/backend.yaml
+
       - name: Apply manifest
         run: |
           export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-          cat k8s/frontend/frontend.yaml
-          kubectl apply -f k8s/frontend/frontend.yaml -n default
+          kubectl apply -f k8s/frontend/frontend.yaml -n dev
+          kubectl apply -f k8s/backend/backend.yaml -n dev
