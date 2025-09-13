@@ -66,5 +66,5 @@ jobs:
       - name: Apply manifest
         run: |
           export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-          kubectl apply -f k8s/frontend/frontend.yaml -n dev
-          kubectl apply -f k8s/backend/backend.yaml -n dev
+          kubectl apply -f k8s/frontend/frontend.yaml -n frontend
+          kubectl apply -f k8s/backend/backend.yaml -n backend
