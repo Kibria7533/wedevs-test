@@ -29,6 +29,22 @@ if (process.env.NODE_ENV === "production") {
 } else {
   app.get("/", (req, res) => res.json({ status: "API is running on /api" }));
 }
+// Simple liveness check (always return OK if process is alive)
+app.get("/live", (req, res) => {
+  res.status(200).send("OK");
+});
+
+// Readiness check (verify DB connection works)
+app.get("/ready", async (req, res) => {
+  try {
+    await sequelize.authenticate();  // Sequelize ping
+    res.status(200).send("READY");
+  } catch (error) {
+    console.error("DB not ready:", error.message);
+    res.status(500).send("DB not ready");
+  }
+});
+
 app.use("/api/users", usersRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/articles", articlesRoutes);
