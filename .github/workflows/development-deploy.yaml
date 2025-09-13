@@ -35,6 +35,13 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend:${{ steps.vars.outputs.TAG }}
 
+      - name: Create .env file for frontend
+        working-directory: ./frontend
+        run: |
+          echo "REACT_APP_API_URI=${{ secrets.REACT_APP_API_URI }}" > .env
+          cat .env
+
+
       - name: Build & Push Frontend
         uses: docker/build-push-action@v5
         with:
