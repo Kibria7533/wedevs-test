@@ -1,9 +1,11 @@
 import axios from "axios";
 import errorHandler from "../helpers/errorHandler";
+const BASE_URL=process.env.REACT_APP_API_URI
 
 async function userSignUp({ username, email, password }) {
   try {
     const { data } = await axios({
+     baseURL: BASE_URL,
       data: { user: { username, email, password } },
       method: "POST",
       url: "api/users",

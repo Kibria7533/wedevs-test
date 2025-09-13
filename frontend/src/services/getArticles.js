@@ -1,5 +1,6 @@
 import axios from "axios";
 import errorHandler from "../helpers/errorHandler";
+const BASE_URL=process.env.REACT_APP_API_URI
 
 // prettier-ignore
 async function getArticles({ headers, limit = 3, location, page = 0, tagName, username }) {
@@ -12,7 +13,7 @@ async function getArticles({ headers, limit = 3, location, page = 0, tagName, us
       tag: `api/articles?tag=${tagName}&&limit=${limit}&&offset=${page}`,
     };
 
-    const { data } = await axios({ url: url[location], headers });
+    const { data } = await axios({  baseURL: BASE_URL, url: url[location], headers });
 
     return data;
   } catch (error) {
