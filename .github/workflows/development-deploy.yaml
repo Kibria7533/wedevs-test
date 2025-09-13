@@ -49,6 +49,8 @@ jobs:
 
       - name: Update image in manifest
         run: |
+          pwd
+          ls
           cat k8s/frontend/frontend.yaml
           sed -i "s|01720588884/frontend:latest|${{ secrets.DOCKERHUB_USERNAME }}/frontend:${{ steps.vars.outputs.TAG }}|" k8s/frontend/frontend.yaml
           cat k8s/frontend/frontend.yaml
