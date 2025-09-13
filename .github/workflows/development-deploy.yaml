@@ -53,8 +53,9 @@ jobs:
         run: |
           TAG=${{ needs.docker.outputs.image-tag }}
           echo "Using tag: $TAG"
-          sed -i "s|***/frontend:latest|${{ secrets.DOCKERHUB_USERNAME }}/frontend:${TAG}|" k8s/frontend/frontend.yaml
+          sed -i "s|.*/frontend:latest|${{ secrets.DOCKERHUB_USERNAME }}/frontend:${TAG}|" k8s/frontend/frontend.yaml
           cat k8s/frontend/frontend.yaml
+
 
 #      - name: Apply manifest
 #        run: |
