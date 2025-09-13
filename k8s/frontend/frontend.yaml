@@ -20,7 +20,7 @@ spec:
             - containerPort: 80
           env:
             - name: REACT_APP_API_URL
-              value: http://backend:3001/api
+              value: http://backend.backend:3001/api
           livenessProbe:
             httpGet:
               path: /
