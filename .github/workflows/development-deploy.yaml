@@ -54,4 +54,5 @@ jobs:
       - name: Apply manifest
         run: |
           export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+          cat k8s/frontend/frontend.yaml
           kubectl apply -f k8s/frontend/frontend.yaml -n default
