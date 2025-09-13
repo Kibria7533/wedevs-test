@@ -27,21 +27,21 @@ jobs:
           SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)
           echo "TAG=${BRANCH}-${SHORT_SHA}" >> $GITHUB_OUTPUT
 
-#      - name: Build & Push Backend
-#        uses: docker/build-push-action@v5
-#        with:
-#          context: ./backend
-#          file: ./backend/Dockerfile
-#          push: true
-#          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend:${{ steps.vars.outputs.TAG }}
-#
-#      - name: Build & Push Frontend
-#        uses: docker/build-push-action@v5
-#        with:
-#          context: ./frontend
-#          file: ./frontend/Dockerfile
-#          push: true
-#          tags: ${{ secrets.DOCKERHUB_USERNAME }}/frontend:${{ steps.vars.outputs.TAG }}
+      - name: Build & Push Backend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend:${{ steps.vars.outputs.TAG }}
+
+      - name: Build & Push Frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/frontend:${{ steps.vars.outputs.TAG }}
 
   deploy:
     needs: docker
@@ -56,10 +56,8 @@ jobs:
           sed -i "s|\(image:\s*\).*/frontend:latest|\1${{ secrets.DOCKERHUB_USERNAME }}/frontend:${TAG}|" k8s/frontend/frontend.yaml
           cat k8s/frontend/frontend.yaml
 
-
-
-#      - name: Apply manifest
-#        run: |
-#          export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-#          cat k8s/frontend/frontend.yaml
-#          kubectl apply -f k8s/frontend/frontend.yaml -n default
+      - name: Apply manifest
+        run: |
+          export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+          cat k8s/frontend/frontend.yaml
+          kubectl apply -f k8s/frontend/frontend.yaml -n default
