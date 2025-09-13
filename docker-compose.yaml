@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+  # ----------------- DATABASE -----------------
+  db:
+    image: postgres:14-alpine
+    container_name: postgres_db
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - /home/gk/wedevs/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: citizix_user
+      POSTGRES_PASSWORD: S3cret
+      POSTGRES_DB: citizix_db
+
+  # ----------------- BACKEND -----------------
+  backend:
+    build: ./backend
+    container_name: backend_app
+    restart: always
+    depends_on:
+      - db
+    environment:
+      NODE_ENV: production
+      DB_HOST: db          # must match service name
+      DB_USER: citizix_user
+      DB_PASSWORD: S3cret
+      DB_NAME: citizix_db
+      DB_PORT: 5432
+    ports:
+      - "3001:3001"
+    # "npm start" already waits for postgres:5432 before starting
+    command: npm start
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  # ----------------- FRONTEND -----------------
+  frontend:
+    build: ./frontend
+    container_name: frontend_app
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    environment:
+      REACT_APP_API_URL: http://backend:3001
