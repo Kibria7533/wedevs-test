@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: 01720588884/we-devs-frontend:latest
+          image: 01720588884/frontend:latest
           ports:
             - containerPort: 80
           env:

@@ -47,8 +47,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Update image in manifest
+        run: |
+          sed -i "s|01720588884/frontend:latest|${{ secrets.DOCKERHUB_USERNAME }}/frontend:${{ steps.vars.outputs.TAG }}|" k8s/frontend/frontend.yaml
 
-      - name: Configure K3s context
+      - name: Apply manifest
         run: |
           export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-          kubectl get nodes
+          kubectl apply -f k8s/frontend/frontend.yaml -n default
